@@ -1,8 +1,16 @@
-function User(userName)
+function User()
 {
-    this.userName=userName;
-    this.score;
+    this.userName="defualtUser";
+    this.score=0;
+function setName(uName)
+{this.userName=uName;}
+function setScore(scorel)
+{
+    this.score=scorel;
 }
+}
+var newUser=new User();
+
 // getting back difficulty
 var difficulty=localStorage.getItem("difficulty");
 //// main body
@@ -10,6 +18,8 @@ var mainBody=document.querySelector('body');
 /////// username
 var userNametoEnter=document.querySelector('.userName');
 userNametoEnter.innerText='User: '+localStorage.getItem("userName");
+
+
 
 // Score Counter
 var gameTimer=20;
@@ -54,7 +64,7 @@ var movingBasket=addEventListener('keydown',function(e){
     }
     else if(e.keyCode==39)
     {   
-        if(left<100-parseInt(basket.style.width)*100/window.innerWidth)
+        if(left<95-parseInt(basket.style.width)*100/window.innerWidth)
         {
             left+=5;
         basket.style.left=left+'%';
@@ -103,6 +113,15 @@ if(difficulty==0 || difficulty==1)
             mainBody.removeChild(egg);
             eggcatchSound.play();
             scoreCounter++;
+            if(scoreCounter==10) ////////////if he wins before time
+{
+    localStorage.setItem("finalScore",scoreCounter);
+    
+    window.location.replace('scoresheetsuccess.html');
+     clearInterval(eggTravel);
+     clearInterval(eggDrop);
+    
+};
             displayScore.innerText='Score: '+scoreCounter;
             clearInterval(eggTravel);
             
@@ -142,6 +161,18 @@ if(difficulty==0 || difficulty==1)
             mainBody.removeChild(egg);
             eggcatchSound.play();
             scoreCounter++;
+            if(scoreCounter==10) ////////////if he wins before time
+            {
+                localStorage.setItem("finalScore",scoreCounter);
+                
+                window.location.replace('scoresheetsuccess.html');
+                clearInterval(eggTravel);
+                clearInterval(eggDrop);
+                
+            };
+                        displayScore.innerText='Score: '+scoreCounter;
+                        clearInterval(eggTravel);
+                        
             displayScore.innerText='Score: '+scoreCounter;
             clearInterval(eggTravel);
             
@@ -181,6 +212,18 @@ if(difficulty==0 || difficulty==1)
             mainBody.removeChild(egg);
             eggcatchSound.play();
             scoreCounter++;
+            if(scoreCounter==10) ////////////if he wins before time
+            {
+                localStorage.setItem("finalScore",scoreCounter);
+                
+                window.location.replace('scoresheetsuccess.html');
+                clearInterval(eggTravel);
+                clearInterval(eggDrop);
+                
+            };
+                        displayScore.innerText='Score: '+scoreCounter;
+                        clearInterval(eggTravel);
+                        
             displayScore.innerText='Score: '+scoreCounter;
             clearInterval(eggTravel);
             
@@ -204,7 +247,7 @@ if(difficulty==0 || difficulty==1)
     
            
         }
-    }, 10);    //egg travel time
+    }, 15);    //egg travel time
     
  }
  
@@ -212,6 +255,7 @@ if(difficulty==0 || difficulty==1)
 
 /////
 }
+
 var eggDrop=setInterval(eggDropOnce, 1500); //interval between eggs
 setTimeout(() => {
     clearInterval(eggDrop);
@@ -221,13 +265,15 @@ setTimeout(() => {
 setTimeout(() => {
     if(scoreCounter>=10)
     {
-        localStorage.setItem("finalScore",scoreCounter);
+    localStorage.setItem("finalScore",scoreCounter);
+    
     window.location.replace('scoresheetsuccess.html');
     
 
     }
     else
     {
+       
         localStorage.setItem("finalScore",scoreCounter);
         window.location.replace('scoresheetfail.html');
 
@@ -236,6 +282,68 @@ setTimeout(() => {
     
 }, 20000);
 
+////////////////////////// GOLDEN EGG ////////////////////////////////
+
+setTimeout(() => {
+    //creating an egg
+    var gegg=document.createElement('img');
+    gegg.setAttribute('src','images/goldenegg.png');
+    gegg.setAttribute('style','width:100px;height:100px;position:absolute;bottom:100%;left:0%;');
+    var crashedEgg=document.createElement('img');
+    crashedEgg.setAttribute('src','images/eggCrash.png');
+    crashedEgg.setAttribute('style','width:70px;height:70px;position:absolute;bottom:0%;left:0%');
+
+var geggBottom=100;
+var geggLeft=Math.floor(Math.random()*96);
+gegg.style.left=eggLeft+'%';
+var geggTravel=setInterval(() => {
+    mainBody.appendChild(gegg);
+     geggBottom-=5;
+    gegg.style.bottom=geggBottom+'%';
+////////////////////////////////// egg catched by basket //////////////////////////////
+    if(parseInt(gegg.style.bottom)<5 && Math.abs(parseInt(gegg.style.left)-parseInt(basket.style.left))<5)
+    {
+        mainBody.removeChild(gegg);
+        eggcatchSound.play();
+        scoreCounter+=5;
+        if(scoreCounter>=10) ////////////if he wins before time
+{
+localStorage.setItem("finalScore",scoreCounter);
+
+window.location.replace('scoresheetsuccess.html');
+ clearInterval(geggTravel);
+ clearInterval(eggDrop);
+
+};
+        displayScore.innerText='Score: '+scoreCounter;
+        clearInterval(geggTravel);
+        
+    }
+
+                                                               ////////////////////////////////////
+    if(parseInt(gegg.style.bottom)<0)/////egg reached bottom
+    {
+        mainBody.removeChild(gegg);
+        
+        clearInterval(geggTravel);
+        crashedEgg.style.left=gegg.style.left;
+
+        mainBody.appendChild(crashedEgg); // cool egg reaction lol
+        eggCrashSound.play()//cool egg sound
+        setTimeout(() => {
+            mainBody.removeChild(crashedEgg);
+
+        }, 3000);
+       
+
+       
+    }
+}, 50);    //egg travel time
+
+
+
+    
+}, Math.ceil(Math.random()*20000));
 
 
 

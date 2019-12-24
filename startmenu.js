@@ -1,6 +1,11 @@
 //// start game button
 var startGameButton=document.querySelector('#startgame');
 var difficulty=document.querySelector('select').children;
+/// how to play
+var htp=document.querySelector('#htp');
+htp.addEventListener('click',function(){
+alert("Use the left and right arrow keys to move the basket, try to catch as many eggs as you can before the time ends.");
+});
 
 /// start button activation
 startGameButton.addEventListener('click',function(){
