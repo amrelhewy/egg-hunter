@@ -1,6 +1,8 @@
-html
+body
 {
-    background-color: #5D4038;
+    background-image: url(images/chickenegg.png);
+    background-repeat:repeat;
+    
 
 }
 .log
